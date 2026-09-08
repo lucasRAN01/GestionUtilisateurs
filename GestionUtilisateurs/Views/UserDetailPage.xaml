@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionUtilisateurs.ViewModels"
+             x:Class="GestionUtilisateurs.Views.UserDetailPage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="8">
+
+            <!-- Messages -->
+            <Border IsVisible="{Binding HasError}" BackgroundColor="#FDE7E7" StrokeShape="RoundRectangle 8" Padding="12">
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabelStyle}" />
+            </Border>
+            <Border IsVisible="{Binding HasSuccess}" BackgroundColor="#E6F4EA" StrokeShape="RoundRectangle 8" Padding="12">
+                <Label Text="{Binding SuccessMessage}" Style="{StaticResource SuccessLabelStyle}" />
+            </Border>
+
+            <!-- === Informations d'identité === -->
+            <Label Text="Identité" Style="{StaticResource SectionTitleLabelStyle}" Margin="0,8,0,0" />
+            <Border Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout Spacing="0">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout>
+                            <Label Text="Nom" Style="{StaticResource FieldLabelStyle}" />
+                            <Entry Text="{Binding Nom}" Placeholder="Nom" Style="{StaticResource FieldEntryStyle}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label Text="Prénom" Style="{StaticResource FieldLabelStyle}" />
+                            <Entry Text="{Binding Prenom}" Placeholder="Prénom" Style="{StaticResource FieldEntryStyle}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Label Text="Adresse e-mail" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Email}" Placeholder="exemple@domaine.fr" Keyboard="Email" Style="{StaticResource FieldEntryStyle}" />
+
+                    <Label Text="Téléphone" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Telephone}" Placeholder="+33 6 12 34 56 78" Keyboard="Telephone" Style="{StaticResource FieldEntryStyle}" />
+
+                    <Label Text="Notes" Style="{StaticResource FieldLabelStyle}" />
+                    <Editor Text="{Binding Notes}" Placeholder="Notes éventuelles..." Style="{StaticResource NotesEditorStyle}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- === Compte === -->
+            <Label Text="Compte" Style="{StaticResource SectionTitleLabelStyle}" />
+            <Border Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Nom d'utilisateur" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Username}" Placeholder="Nom d'utilisateur" IsEnabled="{Binding IsCreateMode}" Style="{StaticResource FieldEntryStyle}" />
+
+                    <Label Text="Rôle" Style="{StaticResource FieldLabelStyle}" />
+                    <Picker ItemsSource="{Binding RoleList}"
+                            ItemDisplayBinding="{Binding Nom}"
+                            SelectedItem="{Binding SelectedRole}"
+                            Style="{StaticResource FieldPickerStyle}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- === Mot de passe (création uniquement) === -->
+            <VerticalStackLayout IsVisible="{Binding IsCreateMode}">
+                <Label Text="Mot de passe" Style="{StaticResource SectionTitleLabelStyle}" />
+                <Border Style="{StaticResource CardFrameStyle}">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="Mot de passe" Style="{StaticResource FieldLabelStyle}" />
+                        <Entry Text="{Binding NewPassword}" IsPassword="True" Placeholder="Minimum 6 caractères" Style="{StaticResource FieldEntryStyle}" />
+
+                        <Label Text="Confirmation" Style="{StaticResource FieldLabelStyle}" />
+                        <Entry Text="{Binding ConfirmNewPassword}" IsPassword="True" Placeholder="Confirmez" Style="{StaticResource FieldEntryStyle}" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- === Actions d'édition === -->
+            <VerticalStackLayout IsVisible="{Binding IsEditMode}" Spacing="8">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <Button Text="{Binding StatusLabel, StringFormat='Statut : {0}'}"
+                            Command="{Binding ToggleStatusCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button Text="Changer le mot de passe"
+                            Command="{Binding ChangePasswordCommand}"
+                            Style="{StaticResource SecondaryButtonStyle}" />
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Bouton Enregistrer -->
+            <Button Text="Enregistrer"
+                    Command="{Binding SaveCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="0,12,0,0" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                               Style="{StaticResource BusyIndicatorStyle}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

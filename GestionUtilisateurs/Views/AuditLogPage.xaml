@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionUtilisateurs.ViewModels"
+             x:Class="GestionUtilisateurs.Views.AuditLogPage"
+             Title="Historique">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="8">
+
+        <!-- Recherche -->
+        <SearchBar Grid.Row="0"
+                   Text="{Binding SearchText, Mode=TwoWay}"
+                   Placeholder="Rechercher dans l'historique..."
+                   Style="{StaticResource SearchBarStyle}"
+                   SearchCommand="{Binding SearchCommand}" />
+
+        <!-- Messages -->
+        <Border Grid.Row="1" IsVisible="{Binding HasError}" BackgroundColor="#FDE7E7" StrokeShape="RoundRectangle 8" Padding="12">
+            <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabelStyle}" />
+        </Border>
+
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                           Style="{StaticResource BusyIndicatorStyle}" />
+
+        <!-- Journal -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Items}"
+                        SelectionMode="None"
+                        EmptyView="Aucune action enregistrée."
+                        Margin="0,8,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemStyle}">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    StrokeShape="RoundRectangle 6" Padding="8,4"
+                                    VerticalOptions="Start">
+                                <Label Text="{Binding ActionLabel}" TextColor="White" FontSize="12" FontAttributes="Bold" />
+                            </Border>
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                                <Label Text="{Binding Description}" FontSize="14" TextColor="{StaticResource PrimaryDarkText}" />
+                                <Label Text="{Binding DateFormatted}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label Text="{Binding ActorName}" FontSize="12" TextColor="{StaticResource Gray600}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Target, StringFormat='→ {0}'}"
+                                           FontSize="12" TextColor="{StaticResource Gray600}"
+                                           IsVisible="{Binding HasTarget}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

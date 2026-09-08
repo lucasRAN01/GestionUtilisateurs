@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionUtilisateurs.ViewModels"
+             x:Class="GestionUtilisateurs.Views.SetupAdminPage"
+             Title="Configuration initiale">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="8">
+
+            <Label Text="Création du compte administrateur"
+                   Style="{StaticResource PageTitleLabelStyle}" />
+
+            <Label Text="Aucun administrateur n'existe. Créez votre premier compte pour utiliser l'application."
+                   TextColor="{StaticResource Gray500}"
+                   Margin="0,0,0,12" />
+
+            <!-- Messages -->
+            <Border IsVisible="{Binding HasError}" BackgroundColor="#FDE7E7" StrokeShape="RoundRectangle 8" Padding="12">
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabelStyle}" />
+            </Border>
+            <Border IsVisible="{Binding HasSuccess}" BackgroundColor="#E6F4EA" StrokeShape="RoundRectangle 8" Padding="12">
+                <Label Text="{Binding SuccessMessage}" Style="{StaticResource SuccessLabelStyle}" />
+            </Border>
+
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="Prénom" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Prenom}" Placeholder="Prénom" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                    <Label Text="Nom" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Nom}" Placeholder="Nom" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Label Text="Adresse e-mail" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Email}" Placeholder="exemple@domaine.fr" Keyboard="Email" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Label Text="Nom d'utilisateur" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Username}" Placeholder="Nom d'utilisateur" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Mot de passe" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding Password}" IsPassword="True" Placeholder="Minimum 6 caractères" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Confirmation" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry Text="{Binding ConfirmPassword}" IsPassword="True" Placeholder="Confirmez" Style="{StaticResource FieldEntryStyle}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Button Text="Créer le compte administrateur"
+                    Command="{Binding CreateAdminCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="0,16,0,0" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                               Style="{StaticResource BusyIndicatorStyle}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionUtilisateurs.ViewModels"
+             x:Class="GestionUtilisateurs.Views.UserListPage"
+             x:Name="UserListRoot"
+             Title="Liste des utilisateurs">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ajouter" Order="Primary"
+                     Command="{Binding AddUserCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="8">
+
+        <!-- Recherche -->
+        <SearchBar Grid.Row="0"
+                   Text="{Binding SearchText, Mode=TwoWay}"
+                   Placeholder="Rechercher (nom, e-mail, rôle...)"
+                   Style="{StaticResource SearchBarStyle}"
+                   SearchCommand="{Binding SearchCommand}" />
+
+        <!-- Messages -->
+        <Border Grid.Row="1" IsVisible="{Binding HasError}" BackgroundColor="#FDE7E7" StrokeShape="RoundRectangle 8" Padding="12">
+            <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabelStyle}" />
+        </Border>
+        <Border Grid.Row="1" IsVisible="{Binding HasSuccess}" BackgroundColor="#E6F4EA" StrokeShape="RoundRectangle 8" Padding="12">
+            <Label Text="{Binding SuccessMessage}" Style="{StaticResource SuccessLabelStyle}" />
+        </Border>
+
+        <!-- Indicateur -->
+        <ActivityIndicator Grid.Row="1" IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                           Style="{StaticResource BusyIndicatorStyle}" />
+
+        <!-- Liste -->
+        <CollectionView Grid.Row="3" ItemsSource="{Binding Users}"
+                        SelectionMode="None"
+                        EmptyView="Aucun utilisateur trouvé."
+                        Margin="0,8,0,0">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource ListItemStyle}">
+                        <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding FullName}"
+                                       FontSize="16" FontAttributes="Bold" TextColor="{StaticResource PrimaryDarkText}" />
+                                <Label Text="{Binding Username}" TextColor="{StaticResource Gray500}" FontSize="13" />
+                            </VerticalStackLayout>
+
+                            <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="6">
+                                <Border BackgroundColor="{Binding IsActive, Converter={StaticResource StatusColorConverter}}"
+                                        StrokeShape="RoundRectangle 12" Padding="8,2">
+                                    <Label Text="{Binding StatusLabel}" TextColor="White" FontSize="12" />
+                                </Border>
+                            </HorizontalStackLayout>
+
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding Email}" TextColor="{StaticResource Gray600}" FontSize="13" />
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding RoleName}" TextColor="{StaticResource Primary}" FontSize="13" FontAttributes="Bold" />
+
+                            <!-- Actions -->
+                            <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="4">
+                                <Button Text="Modifier" FontSize="12"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        TextColor="{StaticResource PrimaryDark}"
+                                        CornerRadius="8" Padding="8,2" HeightRequest="34"
+                                        Command="{Binding Source={x:Reference UserListRoot}, Path=BindingContext.EditUserCommand}"
+                                        CommandParameter="{Binding Id}" />
+                                <Button Text="Activer/Désactiver" FontSize="12"
+                                        BackgroundColor="{StaticResource Gray200}"
+                                        TextColor="{StaticResource Gray900}"
+                                        CornerRadius="8" Padding="8,2" HeightRequest="34"
+                                        Command="{Binding Source={x:Reference UserListRoot}, Path=BindingContext.ToggleStatusCommand}"
+                                        CommandParameter="{Binding Id}" />
+                                <Button Text="Supprimer" FontSize="12"
+                                        BackgroundColor="{StaticResource Danger}"
+                                        TextColor="White"
+                                        CornerRadius="8" Padding="8,2" HeightRequest="34"
+                                        Command="{Binding Source={x:Reference UserListRoot}, Path=BindingContext.DeleteCommand}"
+                                        CommandParameter="{Binding Id}" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionUtilisateurs.ViewModels"
+             x:Class="GestionUtilisateurs.Views.AdminDashboardPage"
+             Title="Tableau de bord">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Déconnexion" Order="Primary" Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- En-tête -->
+            <VerticalStackLayout Spacing="4">
+                <Label Text="{Binding Title}" Style="{StaticResource PageTitleLabelStyle}" />
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Connecté en tant que " TextColor="{StaticResource Gray500}" />
+                            <Span Text="{Binding NomUtilisateurCourant}" FontAttributes="Bold" TextColor="{StaticResource PrimaryDarkText}" />
+                            <Span Text=" · Rôle : " TextColor="{StaticResource Gray500}" />
+                            <Span Text="{Binding RoleCourant}" FontAttributes="Bold" TextColor="{StaticResource PrimaryDarkText}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </VerticalStackLayout>
+
+            <!-- Messages -->
+            <Border IsVisible="{Binding HasError}" BackgroundColor="#FDE7E7" StrokeShape="RoundRectangle 8" Padding="12">
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabelStyle}" />
+            </Border>
+
+            <!-- Statistiques -->
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" ColumnSpacing="12" RowSpacing="12">
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardFrameStyle}">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="{Binding TotalUtilisateurs}" FontSize="36" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center" />
+                        <Label Text="Total utilisateurs" TextColor="{StaticResource Gray600}" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CardFrameStyle}">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="{Binding UtilisateursActifs}" FontSize="36" FontAttributes="Bold" TextColor="{StaticResource Success}" HorizontalTextAlignment="Center" />
+                        <Label Text="Actifs" TextColor="{StaticResource Gray600}" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CardFrameStyle}">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="{Binding UtilisateursInactifs}" FontSize="36" FontAttributes="Bold" TextColor="{StaticResource Danger}" HorizontalTextAlignment="Center" />
+                        <Label Text="Inactifs" TextColor="{StaticResource Gray600}" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Actions rapides -->
+            <Label Text="Actions rapides" Style="{StaticResource SectionTitleLabelStyle}" Margin="0,8,0,0" />
+
+            <Button Text="Gérer les utilisateurs"
+                    Command="{Binding NavigateUsersCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}" />
+
+            <Button Text="Consulter l'historique"
+                    Command="{Binding NavigateAuditCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}" />
+
+            <Button Text="Changer mon mot de passe"
+                    Command="{Binding NavigateChangePasswordCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                               Style="{StaticResource BusyIndicatorStyle}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
